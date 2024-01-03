@@ -9,6 +9,14 @@ using System.Threading.Tasks;
 
 namespace Data.Entities
 {
+    public enum PhotoFormat
+    {
+        JPEG,
+        PNG,
+        GIF,
+        // Add other formats as needed
+    }
+
     [Table("photos")]
     public class PhotoEntity
     {
@@ -22,11 +30,11 @@ namespace Data.Entities
         [MaxLength(50)]
         public string? Resolution { get; set; }
         [Required]
-        public required DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
         //TO DO ENUM FORMAT
-        public string? Format { get; set; }
+        public PhotoFormat Format { get; set; }
         public AuthorEntity? Author { get; set; }
         [Required]
-        public required int AuthorId { get; set; }
+        public int AuthorId { get; set; }
     }
 }

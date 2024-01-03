@@ -17,13 +17,17 @@ namespace Data
 
         public AppDbContext()
         {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            DbPath = System.IO.Path.Join(path, "Photos.db");
+            var folder = Path.Combine(Environment.CurrentDirectory, "BazyDanych");
+            if (!Directory.Exists(folder))
+            {
+                Directory.CreateDirectory(folder);
+            }
+            DbPath = Path.Combine(folder, "Photos.db");
         }
 
         public DbSet<PhotoEntity> Photos { get; set; }
         public DbSet<AuthorEntity> Authors { get; set; }
+        public DbSet<AddressEntity> Address { get; set; }
 
 
 
@@ -66,7 +70,7 @@ namespace Data
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = "user",
-                NormalizedName = "User"
+                NormalizedName = "USER"
             };
             var adminRole = new IdentityRole()
             {
@@ -102,12 +106,55 @@ namespace Data
                 .HasForeignKey(c => c.AuthorId);
 
             modelBuilder.Entity<AuthorEntity>()
+                .HasOne(c => c.Address)
+                .WithMany(o=>o.Authors)
+                .HasForeignKey(c => c.AddressId);
+                
+
+            modelBuilder.Entity<AddressEntity>()
+                .HasKey(o => o.Id);
+                
+
+            modelBuilder.Entity<AddressEntity>()
+                .HasData(
+                    new AddressEntity()
+                    {
+                        Id = 1,
+                        City = "Kraków",
+                        Street = "Św.Filipa 17",
+                        PostalCode = "31-150"
+                    },
+                    new AddressEntity()
+                    {
+                        Id = 2,
+                        City = "Kraków",
+                        Street = "Pod mostem",
+                        PostalCode = "31-666"
+                    }
+                );
+
+            modelBuilder.Entity<AuthorEntity>()
                 .HasData(
                     new AuthorEntity()
                     {
                         Id = 1,
                         Name = "Author1",
-                        Description = "Pierwszy author"
+                        Description = "Pierwszy author",
+                        AddressId = 1
+                    },
+                    new AuthorEntity()
+                    {
+                        Id = 2,
+                        Name = "Author2",
+                        Description = "Drugi author",
+                        AddressId = 1
+                    },
+                    new AuthorEntity()
+                    {
+                        Id = 3,
+                        Name = "Author3",
+                        Description = "Trzeci author",
+                        AddressId = 2
                     }
                 );
 
@@ -119,7 +166,7 @@ namespace Data
                     Description = "Zdjęcie wykonane aparatem nikon",
                     Resolution = "126x126",
                     CreatedDate = new DateTime(2024, 1, 1),
-                    Format = "Test Format",
+                    Format = PhotoFormat.JPEG,
                     AuthorId = 1
                 },
                 new PhotoEntity()
@@ -129,23 +176,20 @@ namespace Data
                     Description = "Zdjęcie wykonane aparatem sony",
                     Resolution = "512x512",
                     CreatedDate = new DateTime(2024, 2, 1),
-                    Format = "Test Format",
-                    AuthorId = 1
+                    Format = PhotoFormat.PNG,
+                    AuthorId = 2
+                },
+                new PhotoEntity()
+                {
+                    PhotoId = 3,
+                    Camera = "Red",
+                    Description = "Zdjęcie wykonane aparatem red",
+                    Resolution = "1024x1024",
+                    CreatedDate = new DateTime(2024, 3, 1),
+                    Format = PhotoFormat.GIF,
+                    AuthorId = 3
                 }
             );
-
-            modelBuilder.Entity<AuthorEntity>()
-                .OwnsOne(o => o.Address)
-                .HasData(
-                    new
-                    {
-                        OrganizationEntityId = 1,
-                        City = "Kraków",
-                        Street = "Św.Filipa 17",
-                        PostalCode = "31-150"
-                    }
-                );
-
         }
     }
 }

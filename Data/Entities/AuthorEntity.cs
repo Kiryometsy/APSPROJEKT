@@ -1,5 +1,4 @@
-﻿using Data.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -18,9 +17,8 @@ namespace Data.Entities
         public required string Name { get; set; }
         [MaxLength(120)]
         public string? Description { get; set; }
-
-        public Address? Address { get; set; }
-        //Sprawdzic co to robi
+        public AddressEntity? Address { get; set; }
+        public int AddressId { get; set; }
         public ISet<PhotoEntity>? Photos { get; set; }
     }
 }
