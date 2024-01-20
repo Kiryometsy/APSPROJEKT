@@ -232,8 +232,8 @@ namespace Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "9adc6ca3-99b4-4170-94c8-1718b80429d6", "9adc6ca3-99b4-4170-94c8-1718b80429d6", "user", "USER" },
-                    { "a6f2ad8f-488c-4ae2-93b4-2521cfd73d0c", "a6f2ad8f-488c-4ae2-93b4-2521cfd73d0c", "admin", "ADMIN" }
+                    { "72142856-f386-4bd9-a132-e62ef6122f5a", "72142856-f386-4bd9-a132-e62ef6122f5a", "admin", "ADMIN" },
+                    { "e256551d-495b-482f-8a17-dd8304440fca", "e256551d-495b-482f-8a17-dd8304440fca", "user", "USER" }
                 });
 
             migrationBuilder.InsertData(
@@ -241,8 +241,8 @@ namespace Data.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "754081f1-6503-4f36-a86f-c678346e5665", 0, "f99c54fb-798c-4506-82b4-52dfcbcefef2", "admin@wsei.edu.pl", true, false, null, "ADMIN@WSEI.EDU.PL", "ADMIN", "AQAAAAIAAYagAAAAEHxW238wTC3/fNG4h7nqoEQnuEsbdTHNh+0cUiYoaHtK490p+lCtXc3tbTzvW7a3Ig==", null, false, "2843eaf6-5560-440d-b02e-f447e13f72fc", false, "admin" },
-                    { "7b93ec78-7c00-43ea-8919-34fd83c61042", 0, "08dd62f7-3ac2-400f-b4f7-9f8cda71e84b", "user@wsei.edu.pl", true, false, null, "USER@WSEI.EDU.PL", "USER", "AQAAAAIAAYagAAAAEAFpq3ZmBB56ya8VCwijreNuYpeKcLe0M/itGFInijQiOwR0ky0Rht4DtPHvyFLd5g==", null, false, "e6c96b67-a34f-4d86-a93f-9696d18ebd52", false, "user" }
+                    { "6ecf9db3-36e8-4e7e-8df8-787b37005614", 0, "75a8be35-6d7d-402c-af09-96b1800d66f1", "admin@wsei.edu.pl", true, false, null, "ADMIN@WSEI.EDU.PL", "ADMIN", "AQAAAAIAAYagAAAAEKmXmWBQCbFvEtG6DaBrPV7QChQ7dQDB88smOfE0IuxoEuN6aQqOYeZ/hDdfKkVAPg==", null, false, "6d076889-efc4-4cb5-8b7f-d0cf885148ca", false, "admin" },
+                    { "874265d9-0e9a-4656-846b-9739f722ee46", 0, "4994cb62-4970-4514-a6c5-122490bde829", "user@wsei.edu.pl", true, false, null, "USER@WSEI.EDU.PL", "USER", "AQAAAAIAAYagAAAAEH/MtRFreYzUO5bxlJ0BhmTWPoUBBnfeN3anvdpXpTCNkTGagAERlw/BMDysmGWtEw==", null, false, "72a30523-62f2-4e0e-9e25-84c9a374c835", false, "user" }
                 });
 
             migrationBuilder.InsertData(
@@ -250,8 +250,8 @@ namespace Data.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "a6f2ad8f-488c-4ae2-93b4-2521cfd73d0c", "754081f1-6503-4f36-a86f-c678346e5665" },
-                    { "9adc6ca3-99b4-4170-94c8-1718b80429d6", "7b93ec78-7c00-43ea-8919-34fd83c61042" }
+                    { "72142856-f386-4bd9-a132-e62ef6122f5a", "6ecf9db3-36e8-4e7e-8df8-787b37005614" },
+                    { "e256551d-495b-482f-8a17-dd8304440fca", "874265d9-0e9a-4656-846b-9739f722ee46" }
                 });
 
             migrationBuilder.InsertData(

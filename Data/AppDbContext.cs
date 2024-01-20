@@ -12,12 +12,14 @@ namespace Data
 {
     public class AppDbContext : IdentityDbContext<IdentityUser>
     {
-        //Ustawic baze danych żeby była w środku aplikacji
         private string DbPath { get; set; }
 
-        public AppDbContext()
+        public AppDbContext()//DbContextOptions<AppDbContext> options) : base(options)
         {
-            var folder = Path.Combine(Environment.CurrentDirectory, "BazyDanych");
+            var str = Environment.CurrentDirectory;
+            str = str.Substring(0, str.LastIndexOf('\\') + 1);
+            str = str + "Data";
+            var folder = Path.Combine(str, "BazyDanych");
             if (!Directory.Exists(folder))
             {
                 Directory.CreateDirectory(folder);
@@ -29,10 +31,10 @@ namespace Data
         public DbSet<AuthorEntity> Authors { get; set; }
         public DbSet<AddressEntity> Address { get; set; }
 
-
-
-        protected override void OnConfiguring(DbContextOptionsBuilder options) =>
-        options.UseSqlite($"Data Source={DbPath}");
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlite($"Data source={DbPath}");
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -60,7 +62,7 @@ namespace Data
             };
 
             user.PasswordHash = ph.HashPassword(user, "user");
-            admin.PasswordHash = ph.HashPassword(admin, "admin");
+            admin.PasswordHash = ph.HashPassword(admin, "Admin12345!");
 
             modelBuilder.Entity<IdentityUser>()
                 .HasData(
@@ -113,7 +115,7 @@ namespace Data
 
             modelBuilder.Entity<AddressEntity>()
                 .HasKey(o => o.Id);
-                
+
 
             modelBuilder.Entity<AddressEntity>()
                 .HasData(
