@@ -10,21 +10,16 @@ namespace ASPPROJEKT
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            var connectionString = builder.Configuration.GetConnectionString("AppDbContextConnection") ?? throw new InvalidOperationException("Connection string 'AppDbContextConnection' not found.");
 
+            // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddDbContext<Data.AppDbContext>();
             builder.Services.AddDefaultIdentity<IdentityUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<Data.AppDbContext>();
-
             builder.Services.AddMemoryCache();
             builder.Services.AddSession();
-            // Add services to the container.
-
             builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
-
-
             builder.Services.AddMemoryCache();
             builder.Services.AddSession();
 
@@ -38,7 +33,6 @@ namespace ASPPROJEKT
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
