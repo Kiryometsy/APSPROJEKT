@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+using ASPPROJEKT.Controllers;
 using Data;
+using ASPPROJEKT.Services;
 
 
 namespace ASPPROJEKT
@@ -17,11 +21,12 @@ namespace ASPPROJEKT
             builder.Services.AddDefaultIdentity<IdentityUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<Data.AppDbContext>();
-            builder.Services.AddMemoryCache();
-            builder.Services.AddSession();
+
             builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
             builder.Services.AddMemoryCache();
             builder.Services.AddSession();
+
+            builder.Services.AddScoped<PhotoService>();
 
             var app = builder.Build();
 
@@ -42,6 +47,11 @@ namespace ASPPROJEKT
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.MapControllerRoute(
+                name: "photo",
+                pattern: "Photo/{action=Index}/{id?}",
+                defaults: new { controller = "Photo" });
 
             app.Run();
         }

@@ -14,7 +14,7 @@ namespace Data
     {
         private string DbPath { get; set; }
 
-        public AppDbContext()//DbContextOptions<AppDbContext> options) : base(options)
+        public AppDbContext()
         {
             var str = Environment.CurrentDirectory;
             str = str.Substring(0, str.LastIndexOf('\\') + 1);

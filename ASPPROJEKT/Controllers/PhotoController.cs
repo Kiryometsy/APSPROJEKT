@@ -1,79 +1,42 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ASPPROJEKT.Services;
+using Data;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASPPROJEKT.Controllers
 {
     public class PhotoController : Controller
     {
-        public IActionResult Index()
+        private readonly PhotoService _photoService;
+
+        public PhotoController(PhotoService photoService)
         {
-            return View();
+            _photoService = photoService;
         }
 
-    //    //static readonly Dictionary<int, Photo> _photos = new Dictionary<int, Photo>();
-    //    //static int index = 1;
-    //    private readonly IPhotoService _photoService;
+        public async Task<IActionResult> Index()
+        {
+            var photos = await _photoService.GetAllPhotosAsync();
+            return View(photos);
+        }
 
-    //    public PhotoController(IPhotoService photoService)
-    //    {
-    //        _photoService = photoService;
-    //    }
-    //    public IActionResult Index()
-    //    {
-    //        return View(_photoService.FindAll());
-    //    }
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-    //    [HttpGet]
-    //    public IActionResult Create()
-    //    {
-    //        return View();
-    //    }
-    //    [HttpPost]
-    //    public IActionResult Create(Photo model)
-    //    {
-    //        if (ModelState.IsValid)
-    //        {
-    //            _photoService.Add(model);
-    //            return RedirectToAction("Index");
-    //        }
-    //        else
-    //        {
-    //            return View();
-    //        }
-    //    }
-    //    [HttpGet]
-    //    public IActionResult Update(int id)
-    //    {
-    //        return View(_photoService.FindById(id));
-    //    }
+            var photo = await _photoService.GetPhotoDetailsAsync(id.Value);
 
-    //    [HttpPost]
-    //    public IActionResult Update(Photo model)
-    //    {
-    //        if (ModelState.IsValid)
-    //        {
-    //            _photoService.Update(model);
-    //            return RedirectToAction("Index");
-    //        }
-    //        return View();
-    //    }
+            if (photo == null)
+            {
+                return NotFound();
+            }
 
-    //    [HttpGet]
-    //    public IActionResult Details(int id)
-    //    {
-    //        return View(_photoService.FindById(id));
-    //    }
-
-    //    [HttpGet]
-    //    public IActionResult Delete(int id)
-    //    {
-    //        return View(_photoService.FindById(id));
-    //    }
-
-    //    [HttpPost]
-    //    public IActionResult Delete(Photo model)
-    //    {
-    //        _photoService.Delete(model.Id);
-    //        return RedirectToAction("Index");
-    //    }
+            return View(photo);
+        }
     }
 }

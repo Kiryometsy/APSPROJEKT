@@ -1,0 +1,39 @@
+﻿@model List<Data.Entities.PhotoEntity>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<h2>Photo Index</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>PhotoId</th>
+            <th>Camera</th>
+            <th>Description</th>
+            <th>Resolution</th>
+            <th>Created Date</th>
+            <th>Format</th>
+            <th>Author</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var photo in Model)
+        {
+            <tr>
+                <td>@photo.PhotoId</td>
+                <td>@photo.Camera</td>
+                <td>@photo.Description</td>
+                <td>@photo.Resolution</td>
+                <td>@photo.CreatedDate.ToShortDateString()</td>
+                <td>@photo.Format</td>
+                <td>@photo.Author.Name</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@photo.PhotoId" class="btn btn-info">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
