@@ -26,6 +26,8 @@ namespace ASPPROJEKT.Services
 
         public async Task<PhotoEntity?> GetPhotoDetailsAsync(int photoId)
         {
+            //var photo =await _context.Photos.FindAsync(photoId);
+            //photo.Author = await _context.Authors.FindAsync(photo.AuthorId);
             var photo = await _context.Photos
                 .Include(p => p.Author)
                 .ThenInclude(a => a.Address)
@@ -33,25 +35,36 @@ namespace ASPPROJEKT.Services
 
             return photo;
         }
-
+        public async Task<List<AuthorEntity>> FindAllAuthorsForViewModel()
+        {
+            return await _context.Authors.ToListAsync();
+        }
         public async Task CreatePhotoAsync(PhotoEntity photo)
         {
             _context.Photos.Add(photo);
             await _context.SaveChangesAsync();
         }
 
+        public async Task<PhotoEntity> FindById(int id)
+        {
+            var model = await _context.Photos.FindAsync(id);
+            model.Author = await _context.Authors.FindAsync(model.AuthorId);
+            return model;
+        }
         public async Task UpdatePhotoAsync(PhotoEntity photo)
         {
-            _context.Entry(photo).State = EntityState.Modified;
+            _context.Update(photo).State = EntityState.Modified;
+            //_context.Photos.Update(photo);
             await _context.SaveChangesAsync();
         }
 
         public async Task DeletePhotoAsync(int id)
         {
-            var photo = await _context.Photos.FindAsync(id);
-            if (photo != null)
+            PhotoEntity? find =await _context.Photos.FindAsync(id);
+
+            if (find != null)
             {
-                _context.Photos.Remove(photo);
+                _context.Photos.Remove(find);
                 await _context.SaveChangesAsync();
             }
         }

@@ -84,6 +84,8 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.PhotoId }) |
-    <a asp-action="Index">Back to List</a>
+    @Html.ActionLink("Update", "Update", new { id = Model.PhotoId }) |
+    <a asp-action="Index">Back to List</a> |
+    <a asp-action="Delete" asp-route-id="@Model.PhotoId" class="btn btn-danger">Delete</a>
+
 </p>

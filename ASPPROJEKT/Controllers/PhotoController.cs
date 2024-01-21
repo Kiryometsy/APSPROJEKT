@@ -1,7 +1,9 @@
 ﻿using ASPPROJEKT.Services;
 using Data;
+using Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace ASPPROJEKT.Controllers
@@ -37,6 +39,75 @@ namespace ASPPROJEKT.Controllers
             }
 
             return View(photo);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            ViewBag.AuthorList = await _photoService.FindAllAuthorsForViewModel();
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(PhotoEntity model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                await _photoService.CreatePhotoAsync(model);
+                return RedirectToAction("Index");
+            } else
+            {
+            return View(model);
+            }
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            ViewBag.AuthorList = await _photoService.FindAllAuthorsForViewModel();
+            var photo = await _photoService.FindById(id);
+            if (photo == null)
+            {
+                return NotFound();
+            }
+
+            return View(photo);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Update(PhotoEntity photo)
+        {
+            if (ModelState.IsValid)
+            {
+                if (photo.PhotoId <= 0)
+                {
+                    return BadRequest("Invalid ID");
+                }
+
+                await _photoService.UpdatePhotoAsync(photo);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(photo);
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var photo = await _photoService.GetPhotoDetailsAsync(id);
+            if (photo == null)
+            {
+                return NotFound();
+            }
+
+            return View(photo);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(PhotoEntity photo)
+        {
+            await _photoService.DeletePhotoAsync(photo.PhotoId);
+            return RedirectToAction("Index");
         }
     }
 }
