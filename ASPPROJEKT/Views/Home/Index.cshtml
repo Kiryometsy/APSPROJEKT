@@ -1,8 +1,81 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
     ViewData["Title"] = "Home Page";
 }
+<style>
+    .example-info {
+        margin-bottom: 10px;
+    }
+
+    .example-label {
+        display: block;
+        font-weight: bold;
+    }
+
+    .example-value {
+        display: block;
+        margin-top: 5px;
+    }
+
+    .custom-card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        background: linear-gradient(to right, #BBAA99, #B0A090);
+        color: #000; /* Set text color to white for better visibility on gradient background */
+    }
+</style>
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <h1 class="display-4">Welcome @UserManager.GetUserName(User)!</h1>
+    }
+    else
+    {
+        <h1 class="display-4">Welcome</h1>
+    }
+    <div class="container">
+        <div class="text-center mt-4">
+            <h2>Example Accounts</h2>
+        </div>
+        <div class="row">
+            <!-- Card for User Account -->
+            <div class="col-md-6">
+                <div class="card mt-3 custom-card">
+                    <div class="card-body">
+                        <h5 class="card-title">User Account</h5>
+                        <div class="example-info">
+                            <div class="example-label">Username:</div>
+                            <div class="example-value">user@wsei.edu.pl</div>
+                        </div>
+                        <div class="example-info">
+                            <div class="example-label">Password:</div>
+                            <div class="example-value">user</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card for Admin Account -->
+            <div class="col-md-6">
+                <div class="card mt-3 custom-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Admin Account</h5>
+                        <div class="example-info">
+                            <div class="example-label">Username:</div>
+                            <div class="example-value">admin@wsei.edu.pl</div>
+                        </div>
+                        <div class="example-info">
+                            <div class="example-label">Password:</div>
+                            <div class="example-value">Admin12345!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+
+    <h3 class="mt-4">Last visit: <span class="text-success">@ViewData["Visit"]</span></h3>
 </div>

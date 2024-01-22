@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using ASPPROJEKT.Controllers;
 using Data;
 using ASPPROJEKT.Services;
+using ASPPROJEKT.Models;
 
 
 namespace ASPPROJEKT
@@ -27,6 +28,9 @@ namespace ASPPROJEKT
             builder.Services.AddSession();
 
             builder.Services.AddScoped<PhotoService>();
+            builder.Services.AddScoped<AuthorService>();
+            builder.Services.AddScoped<AddressService>();
+
 
             var app = builder.Build();
 
@@ -39,6 +43,7 @@ namespace ASPPROJEKT
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseMiddleware<LastVisitCookie>();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSession();

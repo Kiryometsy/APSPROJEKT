@@ -1,22 +1,95 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background: url(../repeating-triangles.svg);
+}
+
+/* Add some styling to the table */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #BBAA99;
+    margin-bottom: 20px;
+    font-family: 'Arial', sans-serif;
+    border: 1px solid #000;
+}
+
+    /* Style the table header with a gradient background */
+    .table thead {
+        background: linear-gradient(to bottom, #BBAA99, #B0A090);
+        color: #fff;
+        /*box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);*/
+    }
+
+    /* Style the table header cells */
+    .table th {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #000 !important;
+    }
+
+        /* Add a border between header cells */
+        .table th:not(:last-child) {
+            border-right: 1px solid #000;
+        }
+
+    /* Style the table body rows */
+    .table tbody tr:nth-child(even) {
+        background-color: #DCC8B4; /* Slightly lighter color for even rows */
+    }
+
+    .table tbody tr:nth-child(odd) {
+        background-color: #EAD5C0; /* Original color for odd rows */
+    }
+
+    /* Style the table body cells */
+    .table td {
+        padding: 12px;
+        border-right: 1px solid #000;
+    }
+
+        /* Style the last cell in each row to remove the right border */
+        .table td:last-child {
+            border-right: none;
+        }
+
+/* Style the Details button */
+.btndet-info {
+    background-color: #BBAA99;
+    color: #fff;
+    border: 1px solid #000;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+    /* Hover effect for the Details button */
+    .btndet-info:hover {
+        background-color: #000;
+        color: #fff;
+    }
+
+/* Improve the hover effect for table rows */
+.table tbody tr:hover {
+    background-color: #B0A090;
 }
