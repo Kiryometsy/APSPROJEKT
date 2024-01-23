@@ -3,7 +3,7 @@
 <h2>Authors</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btndet btndet-add">Create New</a>
 </p>
 
 <table class="table">
@@ -23,9 +23,9 @@
                 <td>@author.Name</td>
                 <td>@author.Description</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@author.Id">Details</a> |
-                    <a asp-action="Update" asp-route-id="@author.Id">Update</a> |
-                    <a asp-action="Delete" asp-route-id="@author.Id">Delete</a>
+                    <a asp-action="Details" asp-route-id="@author.Id" class="btndet btndet-info">Details</a>
+                    <a asp-action="Update" asp-route-id="@author.Id" class="btndet btndet-up">Update</a>
+                    <a asp-action="Delete" asp-route-id="@author.Id" class="btndet btndet-del">Delete</a>
                 </td>
             </tr>
         }

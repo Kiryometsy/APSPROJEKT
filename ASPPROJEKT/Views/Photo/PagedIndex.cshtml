@@ -6,7 +6,22 @@
 }
 <h2>Photo Index</h2>
 
-<table class="table">
+<div>
+    <form id="filterForm">
+        <a class="btndet btndet-add" asp-action="Create">Add</a>
+        <input type="text" id="authorFilter" name="authorFilter" placeholder="Filter by author: " />
+        <button type="button" onclick="applyFilter()" class="btndet btndet-up">Filter</button>
+        <a class="btndet btndet-info" asp-action="PagedIndex">Clear</a>
+        <label for="pageSize">Page Size:</label>
+        <select id="pageSize" onchange="applyFilter()">
+            <option value="3">3</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+        </select>
+    </form>
+</div>
+
+<table class="table" id="photoTable">
     <thead>
         <tr>
             <th>PhotoId</th>
@@ -20,7 +35,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var photo in Model)
+        @foreach (var photo in Model.Data)
         {
             <tr>
                 <td>@photo.PhotoId</td>
@@ -32,8 +47,128 @@
                 <td>@photo.Author.Name</td>
                 <td>
                     <a asp-action="Details" asp-route-id="@photo.PhotoId" class="btndet btndet-info">Details</a>
+                    <a asp-action="Update" asp-route-id="@photo.PhotoId" class="btndet btndet-up">Update</a>
+                    <a asp-action="Delete" asp-route-id="@photo.PhotoId" class="btndet btndet-del">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<nav aria-label="Photos page navigation">
+    <ul class="pagination">
+        @if (Model.IsPrevious)
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-controller="Photo"
+                   asp-action="PagedIndex"
+                   asp-route-page="@(Model.Page - 1)">
+                    Previous
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">Previous</span>
+            </li>
+        }
+
+        <li class="page-item disabled">
+            <span class="page-link" id="currentPage">@Model.Page</span>
+        </li>
+
+        @if (Model.IsNext)
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-controller="Photo"
+                   asp-action="PagedIndex"
+                   asp-route-page="@(Model.Page + 1)">
+                    Next
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">Next</span>
+            </li>
+        }
+    </ul>
+    <span>Total Pages: <span id="totalPages">@Model.TotalPages</span></span>
+</nav>
+
+@section scripts {
+    <script>
+        function applyFilter() {
+            var authorFilter = document.getElementById("authorFilter").value;
+            var url = `/api/authors/filtered?filter=${authorFilter}`;
+
+            var page = document.getElementById("currentPage").innerText;
+            var size = document.getElementById("pageSize").value;
+
+            if (authorFilter) {
+                url += `&page=${page}&size=${size}`;
+            }
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    var photoTable = document.getElementById("photoTable");
+                    var tbody = photoTable.querySelector('tbody');
+                    tbody.innerHTML = "";
+                    console.log(data);
+                    if (data && data.authors && Array.isArray(data.authors)) {
+                        data.authors.forEach(author => {
+                            let name = author.name;
+                            if (author.photos && Array.isArray(author.photos)) {
+                                author.photos.forEach(photo => {
+                                    var row = tbody.insertRow();
+                                    row.insertCell(0).textContent = photo.photoId;
+                                    row.insertCell(1).textContent = photo.camera;
+                                    row.insertCell(2).textContent = photo.description;
+                                    row.insertCell(3).textContent = photo.resolution;
+
+                                    var formattedDate = new Date(photo.createddate).toLocaleString();
+
+                                    row.insertCell(4).textContent = formattedDate;
+                                    var formatText = mapFormatEnumToString(photo.format);
+                                    row.insertCell(5).textContent = formatText;
+
+                                    row.insertCell(6).textContent = name;
+
+                                    row.insertCell(7).innerHTML = `
+                                        <a href="/Photo/Details/${photo.photoId}" class="btndet btndet-info">Details</a>
+                                        <a href="/Photo/Update/${photo.photoId}" class="btndet btndet-Update">Update</a>
+                                        <a href="/Photo/Delete/${photo.photoId}" class="btndet btndet-Delete">Delete</a>`;
+                                });
+                            }
+                        });
+
+                        document.getElementById("currentPage").innerText = data.currentPage;
+                        document.getElementById("totalPages").innerText = data.totalPages;
+                    } else {
+                        console.error('Error processing data from AuthorApiController.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching data from AuthorApiController:', error);
+                });
+        }
+
+        function mapFormatEnumToString(formatEnum) {
+            switch (formatEnum) {
+                case 0:
+                    return 'JPEG';
+                case 1:
+                    return 'PNG';
+                case 2:
+                    return 'GIF';
+                default:
+                    return 'Unknown';
+            }
+        }
+    </script>
+}

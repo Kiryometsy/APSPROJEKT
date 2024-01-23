@@ -6,6 +6,10 @@
 }
 <h2>Photo Index</h2>
 
+<p>
+    <a asp-action="Create" class="btndet btndet-add">Create New</a>
+</p>
+
 <table class="table">
     <thead>
         <tr>
@@ -32,6 +36,8 @@
                 <td>@photo.Author.Name</td>
                 <td>
                     <a asp-action="Details" asp-route-id="@photo.PhotoId" class="btndet btndet-info">Details</a>
+                    <a asp-action="Update" asp-route-id="@photo.PhotoId" class="btndet btndet-up">Update</a>
+                    <a asp-action="Delete" asp-route-id="@photo.PhotoId" class="btndet btndet-del">Delete</a>
                 </td>
             </tr>
         }

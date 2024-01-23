@@ -93,3 +93,57 @@ body {
 .table tbody tr:hover {
     background-color: #B0A090;
 }
+
+/* Style the Details button */
+.btndet-add {
+    background-color: #EAD5C0;
+    color: #000;
+    border: 1px solid #000;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+    /* Hover effect for the Details button */
+    .btndet-add:hover {
+        background-color: #000;
+        color: #fff;
+    }
+
+/* Style the Details button */
+.btndet-up {
+    background-color: #0a0;
+    color: #fff;
+    border: 1px solid #000;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+    /* Hover effect for the Details button */
+    .btndet-up:hover {
+        background-color: #000;
+        color: #fff;
+    }
+
+/* Style the Details button */
+.btndet-del {
+    background-color: #aa0000;
+    color: #fff;
+    border: 1px solid #000;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+    /* Hover effect for the Details button */
+    .btndet-del:hover {
+        background-color: #000;
+        color: #fff;
+    }

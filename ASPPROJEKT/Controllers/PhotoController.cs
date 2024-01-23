@@ -17,6 +17,17 @@ namespace ASPPROJEKT.Controllers
             _photoService = photoService;
         }
 
+        public async Task<IActionResult> PagedIndex([FromQuery] int page = 1, [FromQuery] int size = 3)
+        {
+            var paginatedPhotos = await _photoService.FindPage(page, size);
+            return View("PagedIndex", paginatedPhotos);
+        }
+
+        public async Task<IActionResult> PagedFilteredIndex(string filter, int page = 1, int size = 3)
+        {
+            var filteredPhotos = await _photoService.FindFilteredPage(filter, page, size);
+            return View("FilteredIndex", filteredPhotos);
+        }
         public async Task<IActionResult> Index()
         {
             var photos = await _photoService.GetAllPhotosAsync();

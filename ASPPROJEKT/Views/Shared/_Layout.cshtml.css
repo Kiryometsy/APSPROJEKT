@@ -58,3 +58,42 @@ button.accept-policy {
 .container .strona {
     height: 100vh !important;
 }
+
+
+/**/
+a.guzik,
+button.guzik {
+    display: inline-block;
+    margin-right: 10px;
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+    will-change: box-shadow, transform;
+    background: #BBAA99;
+    box-shadow: 0px 2px 4px rgb(45 35 66 / 40%), 0px 7px 13px -3px rgb(45 35 66 / 30%), inset 0px -3px 0px #B0A090;
+    height: 48px;
+    line-height: 48px; /* Added line-height for vertical centering */
+    padding: 0 32px;
+    font-size: 18px;
+    border-radius: 6px;
+    color: #36395a;
+    text-decoration: none; /* Remove default underline for links */
+    text-align: center; /* Center the text horizontally */
+}
+
+    a.guzik:hover,
+    button.guzik:hover {
+        box-shadow: 0px 4px 8px rgb(45 35 66 / 40%), 0px 7px 13px -3px rgb(45 35 66 / 30%), inset 0px -3px 0px #B0A090;
+        transform: translateY(-2px);
+    }
+
+    a.guzik:active,
+    button.guzik:active {
+        box-shadow: inset 0px 3px 7px #B0A090;
+        transform: translateY(2px);
+    }
+
+.nav-item:last-child a.guzik,
+.nav-item:last-child button.guzik {
+    margin-right: 0;
