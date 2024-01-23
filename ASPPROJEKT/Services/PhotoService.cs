@@ -68,7 +68,7 @@ namespace ASPPROJEKT.Services
                 .ToListAsync();
         }
 
-        public async Task<PhotoEntity?> GetPhotoDetailsAsync(int photoId)
+        public virtual async Task<PhotoEntity?> GetPhotoDetailsAsync(int photoId)
         {
             //var photo =await _context.Photos.FindAsync(photoId);
             //photo.Author = await _context.Authors.FindAsync(photo.AuthorId);

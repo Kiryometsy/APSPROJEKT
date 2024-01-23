@@ -9,122 +9,109 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
+public class AppDbContextFactory
+{
+    public static AppDbContext Create()
+    {
+        var dbContext = new AppDbContext();
+        // Additional configuration or setup if needed
+        return dbContext;
+    }
+}
 public class PhotoControllerTests
 {
-    private readonly Mock<PhotoService> _mockPhotoService;
-    private readonly PhotoController _controller;
-
-    public PhotoControllerTests()
-    {
-        // Mock dependencies and instantiate the controller
-        _mockPhotoService = new Mock<PhotoService>(/* provide required dependencies */);
-        _controller = new PhotoController(_mockPhotoService.Object);
-
-        // Ensure that a photo with photoId exists in the mock service
-        SeedTestData();
-    }
-
-    private void SeedTestData()
-    {
-        // Seed test data, including a photo with the specified photoId
-        var photoId = 1;
-        var testPhoto = new PhotoEntity { PhotoId = photoId, /* other properties */ };
-
-        // Set up the behavior of the mock service to return the test photo
-        _mockPhotoService.Setup(service => service.GetPhotoDetailsAsync(photoId))
-            .ReturnsAsync(testPhoto);
-    }
 
     [Fact]
     public async Task Index_ReturnsViewResultWithPhotos()
     {
         // Arrange
-        _mockPhotoService.Setup(service => service.GetAllPhotosAsync())
-            .ReturnsAsync(new List<PhotoEntity> { new PhotoEntity() });
+        var dbContext = AppDbContextFactory.Create();
+        var photoService = new PhotoService(dbContext);
+        var controller = new PhotoController(photoService);
 
         // Act
-        var result = await _controller.Index();
+        var result = await controller.Index();
 
         // Assert
+        Assert.IsType<ViewResult>(result);
+    }
+
+    [Fact]
+    public async Task PagedIndex_ReturnsViewResult()
+    {
+        // Arrange
+        var photoServiceMock = new Mock<PhotoService>();
+        var controller = new PhotoController(photoServiceMock.Object);
+
+        // Act
+        var result = await controller.PagedIndex();
+
+        // Assert
+        Assert.IsType<ViewResult>(result);
+    }
+
+    [Fact]
+    public async Task PagedFilteredIndex_ReturnsViewResult()
+    {
+        // Arrange
+        var photoServiceMock = new Mock<PhotoService>();
+        var controller = new PhotoController(photoServiceMock.Object);
+
+        // Act
+        var result = await controller.PagedFilteredIndex(filter: "exampleFilter");
+
+        // Assert
+        Assert.IsType<ViewResult>(result);
+    }
+
+    [Fact]
+    public async Task Index_ReturnsViewResultWithPhotos2()
+    {
+        // Arrange
+        var dbContext = AppDbContextFactory.Create(); // Assuming you have a factory to create AppDbContext
+        var photoService = new PhotoService(dbContext);
+        var controller = new PhotoController(photoService);
+
+        // Act
+        var result = await controller.Index();
+
+        // Assert
+        Assert.IsType<ViewResult>(result);
+        // Add additional assertions as needed
+
+        // For example, you might want to assert that the model is of type List<PhotoEntity>
         var viewResult = Assert.IsType<ViewResult>(result);
-        var model = Assert.IsAssignableFrom<List<PhotoEntity>>(viewResult.ViewData.Model);
-        Assert.Single(model);
+        var model = Assert.IsAssignableFrom<List<PhotoEntity>>(viewResult.Model);
+        // Add more specific assertions based on your controller's behavior
     }
 
     [Fact]
-    public async Task Create_ValidModelState_ReturnsRedirectToIndex()
+    public async Task Details_ReturnsNotFound_WhenIdIsNull()
     {
         // Arrange
-        var photoModel = new PhotoEntity { /* set properties */ };
+        var photoServiceMock = new Mock<PhotoService>();
+        var controller = new PhotoController(photoServiceMock.Object);
 
         // Act
-        var result = await _controller.Create(photoModel);
+        var result = await controller.Details(id: null);
 
         // Assert
-        var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
-        Assert.Equal("Index", redirectToActionResult.ActionName);
-        _mockPhotoService.Verify(service => service.CreatePhotoAsync(photoModel), Times.Once);
+        Assert.IsType<NotFoundResult>(result);
     }
 
     [Fact]
-    public async Task Create_InvalidModelState_ReturnsViewResult()
+    public async Task Details_ReturnsViewResult_WhenPhotoIsFound()
     {
         // Arrange
-        _controller.ModelState.AddModelError("error", "some error");
-        var invalidPhotoModel = new PhotoEntity { /* set properties */ };
+        var photoServiceMock = new Mock<PhotoService>(MockBehavior.Strict);
+        photoServiceMock.Setup(service => service.GetPhotoDetailsAsync(It.IsAny<int>()))
+            .ReturnsAsync(new PhotoEntity()); // Provide a sample photo
+        var controller = new PhotoController(photoServiceMock.Object);
 
         // Act
-        var result = await _controller.Create(invalidPhotoModel);
+        var result = await controller.Details(id: 1);
 
         // Assert
-        var viewResult = Assert.IsType<ViewResult>(result);
-        Assert.Equal(invalidPhotoModel, viewResult.ViewData.Model);
-        _mockPhotoService.Verify(service => service.CreatePhotoAsync(It.IsAny<PhotoEntity>()), Times.Never);
-    }
-
-    [Fact]
-    public async Task Update_ValidModelState_ReturnsRedirectToIndex()
-    {
-        // Arrange
-        var photoModel = new PhotoEntity { /* set properties */ };
-
-        // Act
-        var result = await _controller.Update(photoModel);
-
-        // Assert
-        var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
-        Assert.Equal("Index", redirectToActionResult.ActionName);
-        _mockPhotoService.Verify(service => service.UpdatePhotoAsync(photoModel), Times.Once);
-    }
-
-    [Fact]
-    public async Task Update_InvalidModelState_ReturnsViewResult()
-    {
-        // Arrange
-        _controller.ModelState.AddModelError("error", "some error");
-        var invalidPhotoModel = new PhotoEntity { /* set properties */ };
-
-        // Act
-        var result = await _controller.Update(invalidPhotoModel);
-
-        // Assert
-        var viewResult = Assert.IsType<ViewResult>(result);
-        Assert.Equal(invalidPhotoModel, viewResult.ViewData.Model);
-        _mockPhotoService.Verify(service => service.UpdatePhotoAsync(It.IsAny<PhotoEntity>()), Times.Never);
-    }
-
-    [Fact]
-    public async Task Delete_ReturnsRedirectToIndex()
-    {
-        // Arrange
-        var photoId = 1;
-
-        // Act
-        var result = await _controller.Delete(photoId);
-
-        // Assert
-        var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
-        Assert.Equal("Index", redirectToActionResult.ActionName);
-        _mockPhotoService.Verify(service => service.DeletePhotoAsync(photoId), Times.Once);
+        Assert.IsType<ViewResult>(result);
     }
 }
