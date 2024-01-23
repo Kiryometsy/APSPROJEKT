@@ -97,6 +97,8 @@ namespace ASPPROJEKT.Services
         }
         public async Task UpdatePhotoAsync(PhotoEntity photo)
         {
+            _context.Entry(photo).Reference(p => p.Author).Load();
+
             _context.Update(photo).State = EntityState.Modified;
             //_context.Photos.Update(photo);
             await _context.SaveChangesAsync();
